@@ -94,6 +94,8 @@ USER.md
 !.agent/workflows/
 /local/
 package-lock.json
+docker-compose.override.yml
+proxy-setup.cjs
 .claude/settings.local.json
 .agents/
 .agents
