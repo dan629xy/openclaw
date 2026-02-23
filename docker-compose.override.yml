@@ -1,0 +1,36 @@
+services:
+  openclaw-gateway:
+    environment:
+      https_proxy: http://host.docker.internal:7890
+      http_proxy: http://host.docker.internal:7890
+      no_proxy: localhost,127.0.0.1,host.docker.internal,.feishu.cn,.lark.com
+      NODE_OPTIONS: --require /app/proxy-setup.cjs
+    volumes:
+      - ${OPENCLAW_LOGS_DIR:-/tmp/openclaw-logs}:/home/node/openclaw-logs
+      - ./proxy-setup.cjs:/app/proxy-setup.cjs:ro
+      - ./bootstrap-env.sh:/app/bootstrap-env.sh:ro
+    command: ["/bin/sh", "/app/bootstrap-env.sh"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "--noproxy", "localhost", "http://localhost:18789/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  openclaw-cli:
+    environment:
+      https_proxy: http://host.docker.internal:7890
+      http_proxy: http://host.docker.internal:7890
+      no_proxy: localhost,127.0.0.1,host.docker.internal,.feishu.cn,.lark.com
+      NODE_OPTIONS: --require /app/proxy-setup.cjs
+    volumes:
+      - ${OPENCLAW_LOGS_DIR:-/tmp/openclaw-logs}:/home/node/openclaw-logs
+      - ./proxy-setup.cjs:/app/proxy-setup.cjs:ro
