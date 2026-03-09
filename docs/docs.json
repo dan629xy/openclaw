@@ -858,6 +858,7 @@
                 "group": "Other install methods",
                 "pages": [
                   "install/docker",
+                  "install/docker-cli",
                   "install/podman",
                   "install/nix",
                   "install/ansible",

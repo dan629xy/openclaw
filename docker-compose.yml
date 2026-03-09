@@ -9,9 +9,17 @@ services:
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      TAVILY_API_KEY: ${TAVILY_API_KEY:-}
     volumes:
       - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
       - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
+      - ${OPENCLAW_WORKSPACE_DIR_FEISHU_A:-./vol-feishu-group-a}:/home/node/.openclaw/workspace-feishu-group-a
+      - ${OPENCLAW_WORKSPACE_DIR_FEISHU_B:-./vol-feishu-group-b}:/home/node/.openclaw/workspace-feishu-group-b
+      - ${OPENCLAW_OB_WORK_REVIEW}:/home/node/obsidian-kb/work-review:ro
+      - ${OPENCLAW_OB_HUAWEI}:/home/node/obsidian-kb/huawei:ro
+      - ${OPENCLAW_OB_HUARUN}:/home/node/obsidian-kb/huarun:ro
+      - ${OPENCLAW_CLAUDE_HOME:-./vol-claude-home}:/home/node/.claude
       ## Uncomment the lines below to enable sandbox isolation
       ## (agents.defaults.sandbox). Requires Docker CLI in the image
       ## (build with --build-arg OPENCLAW_INSTALL_DOCKER_CLI=1) or use
@@ -21,8 +29,8 @@ services:
     # group_add:
     #   - "${DOCKER_GID:-999}"
     ports:
-      - "${OPENCLAW_GATEWAY_PORT:-18789}:18789"
-      - "${OPENCLAW_BRIDGE_PORT:-18790}:18790"
+      - "127.0.0.1:${OPENCLAW_GATEWAY_PORT:-18789}:18789"
+      - "127.0.0.1:${OPENCLAW_BRIDGE_PORT:-18790}:18790"
     init: true
     restart: unless-stopped
     command:
@@ -65,9 +73,17 @@ services:
       CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
       CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
       CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      TAVILY_API_KEY: ${TAVILY_API_KEY:-}
     volumes:
       - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
       - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
+      - ${OPENCLAW_WORKSPACE_DIR_FEISHU_A:-./vol-feishu-group-a}:/home/node/.openclaw/workspace-feishu-group-a
+      - ${OPENCLAW_WORKSPACE_DIR_FEISHU_B:-./vol-feishu-group-b}:/home/node/.openclaw/workspace-feishu-group-b
+      - ${OPENCLAW_OB_WORK_REVIEW}:/home/node/obsidian-kb/work-review:ro
+      - ${OPENCLAW_OB_HUAWEI}:/home/node/obsidian-kb/huawei:ro
+      - ${OPENCLAW_OB_HUARUN}:/home/node/obsidian-kb/huarun:ro
+      - ${OPENCLAW_CLAUDE_HOME:-./vol-claude-home}:/home/node/.claude
     stdin_open: true
     tty: true
     init: true

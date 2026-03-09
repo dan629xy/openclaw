@@ -182,6 +182,14 @@ RUN if [ -n "$OPENCLAW_INSTALL_DOCKER_CLI" ]; then \
       rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*; \
     fi
 
+# Optionally install Claude Code CLI.
+# Build with: docker build --build-arg OPENCLAW_INSTALL_CLAUDE_CODE=1 ...
+ARG OPENCLAW_INSTALL_CLAUDE_CODE=""
+RUN if [ -n "$OPENCLAW_INSTALL_CLAUDE_CODE" ]; then \
+      npm install -g @anthropic-ai/claude-code@latest && \
+      echo "[docker] Claude Code CLI installed"; \
+    fi
+
 # Normalize extension paths so plugin safety checks do not reject
 # world-writable directories inherited from source file modes.
 RUN for dir in /app/extensions /app/.agent /app/.agents; do \

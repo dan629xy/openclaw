@@ -137,6 +137,9 @@ _clawdock_ensure_dir() {
 _clawdock_compose() {
   _clawdock_ensure_dir || return 1
   local compose_args=(-f "${CLAWDOCK_DIR}/docker-compose.yml")
+  if [[ -f "${CLAWDOCK_DIR}/docker-compose.override.yml" ]]; then
+    compose_args+=(-f "${CLAWDOCK_DIR}/docker-compose.override.yml")
+  fi
   if [[ -f "${CLAWDOCK_DIR}/docker-compose.extra.yml" ]]; then
     compose_args+=(-f "${CLAWDOCK_DIR}/docker-compose.extra.yml")
   fi
@@ -203,6 +206,11 @@ clawdock-exec() {
 
 clawdock-cli() {
   _clawdock_compose run --rm openclaw-cli "$@"
+}
+
+# Official CLI alias — lets you run `openclaw <command>` just like native installs
+openclaw() {
+  clawdock-cli "$@"
 }
 
 # Maintenance
@@ -365,8 +373,9 @@ clawdock-help() {
   echo ""
 
   echo -e "${_CLR_BOLD}${_CLR_MAGENTA}🐚 Container Access${_CLR_RESET}"
+  echo -e "  $(_cmd openclaw) ${_CLR_CYAN}<cmd>${_CLR_RESET}       ${_CLR_DIM}Run CLI commands like native installs${_CLR_RESET}"
   echo -e "  $(_cmd clawdock-shell)       ${_CLR_DIM}Shell into container (openclaw alias ready)${_CLR_RESET}"
-  echo -e "  $(_cmd clawdock-cli)         ${_CLR_DIM}Run CLI commands (e.g., clawdock-cli status)${_CLR_RESET}"
+  echo -e "  $(_cmd clawdock-cli)         ${_CLR_DIM}Run CLI commands (alias: openclaw)${_CLR_RESET}"
   echo -e "  $(_cmd clawdock-exec) ${_CLR_CYAN}<cmd>${_CLR_RESET}  ${_CLR_DIM}Execute command in gateway container${_CLR_RESET}"
   echo ""
 
